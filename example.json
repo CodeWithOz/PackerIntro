@@ -30,5 +30,6 @@
         "sudo apt-get install -y redis-server"
       ]
     }
-  ]
+  ],
+  "post-processors": ["vagrant"]
 }
