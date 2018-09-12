@@ -12,7 +12,25 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "NameOfBox"
+
+  # Use rsync instead of SMB for synced folders
+  config.vm.allowed_synced_folder_types = [:rsync]
+
+  # override some of the box's settings
+  config.vm.provider :aws do |aws, override|
+    # the default value here didn't match that provided by AWS
+    aws.keypair_name = "KeypairName"
+
+    # use the security group configured for ssh only from my IP
+    aws.security_groups = [ 'CustomSecurityGroup' ]
+
+    # not sure why this is needed because packer used this same ssh username
+    override.ssh.username = "ubuntu"
+
+    # private key matching the keypair_name provided above
+    override.ssh.private_key_path = "drive:/path/to/private/key.pem"
+  end
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
